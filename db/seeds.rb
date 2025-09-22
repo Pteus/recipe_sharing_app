@@ -25,6 +25,7 @@ end
 
 # Create a user
 user = User.find_or_create_by(email_address: "mail@mail.com") do |user|
+  user.username = "username"
   user.password = "password"
   user.password_confirmation = "password"
 end

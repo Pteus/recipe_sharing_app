@@ -8,4 +8,8 @@ class RecipeIngredient < ApplicationRecord
   # Common units for validation/dropdown
   UNITS = %w[cups tablespoons teaspoons ounces pounds grams kilograms liters milliliters pieces cloves].freeze
   validates :unit, inclusion: { in: UNITS }
+
+  def display_quantity
+    "#{quantity} #{unit}"
+  end
 end

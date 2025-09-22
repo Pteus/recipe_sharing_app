@@ -1,0 +1,90 @@
+<!-- app/views/recipes/index.html.erb -->
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>My Recipes</h1>
+    <%= link_to "New Recipe", new_recipe_path, class: "btn btn-primary" %>
+  </div>
+
+  <!-- Search and Filter Form -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <%= form_with url: recipes_path, method: :get, local: true, class: "row g-3" do |form| %>
+        <div class="col-md-6">
+          <%= form.text_field :search,
+                              value: params[:search],
+                              placeholder: "Search recipes...",
+                              class: "form-control" %>
+        </div>
+        <div class="col-md-4">
+          <%= form.select :difficulty,
+                          options_for_select([
+                                               ['All Difficulties', ''],
+                                               %w[Easy Easy],
+                                               %w[Medium Medium],
+                                               %w[Hard Hard]
+                                             ], params[:difficulty]),
+                          {}, { class: "form-select" } %>
+        </div>
+        <div class="col-md-2">
+          <%= form.submit "Filter", class: "btn btn-outline-primary w-100" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Recipes Grid -->
+  <% if @recipes.any? %>
+    <div class="row">
+      <% @recipes.each do |recipe| %>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= link_to recipe.title, recipe, class: "text-decoration-none" %>
+              </h5>
+
+              <p class="card-text text-muted">
+                <%= truncate(recipe.description, length: 100) %>
+              </p>
+
+              <div class="d-flex justify-content-between text-muted small mb-2">
+                <span>
+                  <i class="bi bi-clock"></i>
+                  <%= recipe.total_time %> min
+                </span>
+                <span>
+                  <i class="bi bi-people"></i>
+                  Serves <%= recipe.servings %>
+                </span>
+                <span class="badge bg-secondary">
+                  <%= recipe.difficulty_level %>
+                </span>
+              </div>
+
+              <div class="text-muted small mb-3">
+                <i class="bi bi-tag"></i>
+                <%= pluralize(recipe.ingredients.count, 'ingredient') %>
+              </div>
+            </div>
+
+            <div class="card-footer bg-transparent">
+              <div class="btn-group w-100">
+                <%= link_to "View", recipe, class: "btn btn-outline-primary btn-sm" %>
+                <%= link_to "Edit", edit_recipe_path(recipe), class: "btn btn-outline-secondary btn-sm" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="bi bi-journal-plus display-1 text-muted"></i>
+      </div>
+      <h3 class="text-muted">No recipes yet!</h3>
+      <p class="text-muted">Create your first recipe to get started.</p>
+      <%= link_to "Create Recipe", new_recipe_path, class: "btn btn-primary btn-lg" %>
+    </div>
+  <% end %>
+</div>

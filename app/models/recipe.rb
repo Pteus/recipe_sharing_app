@@ -5,4 +5,8 @@ class Recipe < ApplicationRecord
 
   validates :title, presence: true
   validates :instructions, presence: true
+
+  def total_time
+    prep_time + cook_time
+  end
 end
