@@ -18,7 +18,6 @@ class RecipesController < ApplicationController
   def show
     @recipe_ingredients = @recipe.recipe_ingredients.includes(:ingredient)
 
-
     @serving_size = @recipe.servings
   end
 
@@ -32,6 +31,11 @@ class RecipesController < ApplicationController
   end
 
   def update
+    if @recipe.update(recipe_params)
+      redirect_to @recipe, notice: "Recipe updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy
@@ -41,5 +45,9 @@ class RecipesController < ApplicationController
 
   def set_recipe
     @recipe = Current.user.recipes.find(params[:id])
+  end
+
+  def recipe_params
+    params.expect(recipe: [ :title, :description, :instructions, :prep_time, :cook_time, :servings, :difficulty_level ])
   end
 end
